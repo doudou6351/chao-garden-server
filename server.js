@@ -288,6 +288,17 @@ app.get('/api/angels/:name', (req, res) => {
   res.json(angel);
 });
 
+app.all('/g-ch/api/users/:name/ascend', (req, res) => {
+  const name = req.params.name;
+  const angel = db.upsertAngel(name);
+  res.json({
+    success: true,
+    name: angel.name,
+    ascensions: angel.ascensions,
+    traits: [{ name: 'Mystery', value: angel.ascensions }]
+  });
+});
+
 app.all('/gbook/chaogarden/api/users/:name/ascend', (req, res) => {
   const name = req.params.name;
   const angel = db.upsertAngel(name);
