@@ -245,7 +245,7 @@ app.get('/angels/:name', (req, res) => {
                 </table>
             </div>
             <div id="angel-twitter-container">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-text="It's a miracle!" data-via="arcanekids" data-size="large">Tweet</a>
+                <a href="https://twitter.com/intent/tweet?text=It%27s%20a%20miracle!%20Check%20out%20${encodeURIComponent(angel.name)}%20with%20${angel.ascensions.toLocaleString()}%20ascensions!&via=arcanekids" target="_blank" style="display:inline-block;border:3px solid black;border-radius:10px;padding:10px 20px;background:white;color:black;text-decoration:none;font-size:20px;text-transform:uppercase;">𝕏 Share</a>
             </div>
         </div>
         <div class="links">
