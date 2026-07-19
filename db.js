@@ -25,6 +25,15 @@ function init() {
       updated_at TEXT DEFAULT (datetime('now'))
     )
   `);
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS guestbook (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      pseudo TEXT NOT NULL,
+      stars INTEGER NOT NULL CHECK(stars >= 1 AND stars <= 5),
+      message TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
 }
 
 function getAllAngels() {
@@ -44,6 +53,15 @@ function upsertAngel(name) {
     getDb().prepare('INSERT INTO angels (name, display_name, ascensions) VALUES (?, ?, 1)').run(name, name);
     return getAngel(name);
   }
+}
+
+function addGuestbookEntry(pseudo, stars, message) {
+  getDb().prepare('INSERT INTO guestbook (pseudo, stars, message) VALUES (?, ?, ?)').run(pseudo, stars, message);
+  return getDb().prepare('SELECT * FROM guestbook WHERE id = last_insert_rowid()').get();
+}
+
+function getGuestbookEntries() {
+  return getDb().prepare('SELECT pseudo, stars, message, created_at FROM guestbook ORDER BY created_at DESC').all();
 }
 
 function seedOriginalAngels() {
@@ -66,4 +84,4 @@ function seedOriginalAngels() {
   console.log(`Seeded ${originalAngels.length} original angels`);
 }
 
-module.exports = { getDb, getAllAngels, getAngel, upsertAngel, seedOriginalAngels };
+module.exports = { getDb, getAllAngels, getAngel, upsertAngel, seedOriginalAngels, addGuestbookEntry, getGuestbookEntries };
