@@ -92,34 +92,31 @@ app.get('/guestbook', (req, res) => {
         <link href="client/css/main.css" rel="stylesheet" type="text/css">
         <script data-main="client/js/app.min" src="client/js/lib/requirejs/require.js"></script>
         <style>
-          body { background: #1a1a2e; color: #eee; font-family: Lato, sans-serif; }
           .gb-container { max-width: 700px; margin: 40px auto; padding: 20px; }
-          .gb-container h1 { text-align: center; font-size: 2em; margin-bottom: 30px; color: #e94560; }
-          .gb-form { background: #16213e; padding: 25px; border-radius: 8px; margin-bottom: 30px; }
-          .gb-form label { display: block; margin: 12px 0 4px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-          .gb-form input, .gb-form textarea { width: 100%; padding: 10px; background: #0f3460; border: 1px solid #e94560; color: #eee; border-radius: 4px; font-family: Lato, sans-serif; box-sizing: border-box; }
+          .gb-container h1 { text-align: center; font-size: 2em; margin-bottom: 30px; text-transform: uppercase; }
+          .gb-form { border: 3px solid black; border-radius: 20px; padding: 30px; margin-bottom: 30px; background: white; }
+          .gb-form label { display: block; margin: 12px 0 4px; font-size: 25px; text-transform: uppercase; }
+          .gb-form input, .gb-form textarea { width: 100%; padding: 10px; border: 3px solid black; border-radius: 10px; font-family: Lato, sans-serif; font-size: 20px; box-sizing: border-box; }
           .gb-form textarea { height: 100px; resize: vertical; }
-          .gb-form .star-select { display: flex; gap: 8px; margin: 8px 0; }
+          .gb-form .star-select { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; margin: 8px 0; }
           .gb-form .star-select input { display: none; }
-          .gb-form .star-select label { font-size: 28px; cursor: pointer; color: #555; margin: 0; transition: color .2s; }
-          .gb-form .star-select input:checked ~ input + label,
+          .gb-form .star-select label { font-size: 40px; cursor: pointer; color: #ccc; margin: 0; transition: color .2s; }
+          .gb-form .star-select input:checked ~ label,
           .gb-form .star-select label:hover,
           .gb-form .star-select label:hover ~ label { color: #f5c518; }
-          .gb-form .star-select { direction: rtl; justify-content: flex-end; }
-          .gb-form .star-select label:hover, .gb-form .star-select label:hover ~ label { color: #f5c518; }
-          .gb-form button { background: #e94560; color: #fff; border: none; padding: 12px 30px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
-          .gb-form button:hover { background: #c73652; }
-          .gb-entry { background: #16213e; padding: 15px 20px; border-radius: 6px; margin-bottom: 12px; }
+          .gb-form button { background: #4ccfff; color: black; border: 3px solid black; border-radius: 10px; padding: 12px 30px; font-size: 25px; cursor: pointer; margin-top: 15px; text-transform: uppercase; font-family: Lato, sans-serif; }
+          .gb-form button:hover { background: #3ab8e0; }
+          .gb-entry { border: 3px solid black; border-radius: 20px; padding: 20px; margin-bottom: 12px; background: white; }
           .gb-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-          .gb-pseudo { font-weight: bold; color: #e94560; font-size: 16px; }
-          .gb-stars { color: #f5c518; font-size: 16px; }
-          .gb-date { color: #888; font-size: 12px; margin-left: auto; }
-          .gb-message { color: #ccc; font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
-          .gb-empty { text-align: center; padding: 40px; color: #666; font-style: italic; }
+          .gb-pseudo { font-weight: bold; text-transform: uppercase; font-size: 20px; }
+          .gb-stars { color: #f5c518; font-size: 24px; }
+          .gb-date { color: #666; font-size: 14px; margin-left: auto; }
+          .gb-message { font-size: 18px; line-height: 1.5; white-space: pre-wrap; }
+          .gb-empty { text-align: center; padding: 40px; font-style: italic; font-size: 20px; }
           .gb-back { text-align: center; margin-top: 30px; }
-          .gb-back a { color: #e94560; text-decoration: none; }
-          .gb-back a:hover { text-decoration: underline; }
-          #gb-error { color: #e94560; margin-top: 8px; display: none; }
+          .gb-back a { color: black; text-decoration: none; font-size: 20px; text-transform: uppercase; border: 3px solid black; border-radius: 10px; padding: 10px 20px; display: inline-block; background: white; }
+          .gb-back a:hover { background: #4ccfff; }
+          #gb-error { color: red; margin-top: 8px; display: none; font-size: 18px; }
         </style>
     </head>
     <body>
@@ -181,6 +178,18 @@ app.get('/angels/:name', (req, res) => {
 
   const traitValue = (angel.ascensions + Math.floor(Math.random() * 1000)).toString();
 
+  let nature = 'neutral';
+  if (angel.ascensions >= 10000) nature = 'evil';
+  else if (angel.ascensions >= 1000) nature = 'hero';
+
+  const chaoHtml = ['evil', 'neutral', 'hero'].map(t =>
+    `<div class="chao ${t === nature ? 'active' : ''} chao-chao_${t}"></div>`
+  ).join('\n                ');
+
+  const twitterImage = nature === 'evil' ? '../client/img/chao_evil.png'
+    : nature === 'hero' ? '../client/img/chao_hero.png'
+    : '../client/img/chao_neutral.png';
+
   res.send(`<!DOCTYPE html>
 <html>
     <head>
@@ -195,7 +204,7 @@ app.get('/angels/:name', (req, res) => {
         <meta name="twitter:site" content="@arcanekids"/>
         <meta name="twitter:title" content="Check Out The Angel ${angel.name}!"/>
         <meta name="twitter:description" content="WOW!...${angel.ascensions.toLocaleString()} ascensions!"/>
-        <meta name="twitter:image" content="../client/img/chao_hero.png"/>
+        <meta name="twitter:image" content="${twitterImage}"/>
     </head>
     <body>
         <header>
@@ -203,10 +212,8 @@ app.get('/angels/:name', (req, res) => {
             <a href="https://hedgehog.exposed"><img class="fansonly-badge" src="../client/img/fansonly.png"></a>
         </header>
         <div id="angel-container">
-            <div id="angel-avatar-container" data-nature="hero">
-                <div class="chao  chao-chao_evil"></div>
-                <div class="chao  chao-chao_neutral"></div>
-                <div class="chao active chao-chao_hero"></div>
+            <div id="angel-avatar-container" data-nature="${nature}">
+                ${chaoHtml}
             </div>
             <div id="angel-stats-container">
                 <table id="angel-stats-table">
