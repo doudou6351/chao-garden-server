@@ -120,6 +120,10 @@ app.get('/guestbook', (req, res) => {
         </style>
     </head>
     <body>
+        <header>
+            <a href="/"><img src="client/img/logo.png"></a>
+            <a href="https://hedgehog.exposed"><img class="fansonly-badge" src="client/img/fansonly.png"></a>
+        </header>
         <div class="gb-container">
             <h1>GUESTBOOK</h1>
             <div class="gb-form">
@@ -143,8 +147,13 @@ app.get('/guestbook', (req, res) => {
             <div id="gb-entries">
                 ${entryRows || '<div class="gb-empty">No messages yet. Be the first!</div>'}
             </div>
-            <div class="gb-back"><a href="/">← Back to leaderboard</a></div>
+            <div class="links" style="margin-top:30px">
+                <a href="http://www.arcanekids.com/"><img class="grow" src="client/img/arcanekids.png"></a>
+                <a href="https://hedgehog.exposed"><img class="grow" src="client/img/playnow.gif"></a>
+                <a href="/guestbook"><img class="grow" src="client/img/guestbook.png"></a>
+            </div>
         </div>
+        <footer class="fixed"><img src="client/img/footer.png"></footer>
         <script>
           document.getElementById('guestbook-form').addEventListener('submit', async function(e) {
             e.preventDefault();
